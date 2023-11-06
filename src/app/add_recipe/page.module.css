@@ -1,0 +1,4 @@
+.listItem {
+    display: inline-block;
+    min-width: 200px;
+}
