@@ -1,30 +1,33 @@
 'use client'
 import React, { useRef, useState } from "react"
-import Ingredients, { Ingredient } from "./ingredients"
+import Ingredients from "./ingredients"
 import Method, { MethodStep } from "./method"
-import { useRouter } from "next/navigation"
-import { v4 as uuidv4 } from 'uuid';
+import { createRecipe } from "../lib/actions"
+import { useFormState, useFormStatus } from "react-dom"
+import { Ingredient } from "../models"
+import {v4 as uuidv4} from 'uuid';
 
-export type Recipe = {
+export type UnsavedIngredient = Omit<Ingredient, 'recipe_id'>
+
+export type UnsavedRecipe = {
     id: string;
     title: string
-    ingredients: Ingredient[]
+    ingredients: UnsavedIngredient[]
     method: MethodStep[]
 }
 
 const AddRecipe = () => {
-    const route = useRouter()
+    const [state, formAction ] = useFormState(createRecipe, { message: null})
+    const { pending } = useFormStatus()
     const [title, setTitle] = useState('')
-    const ingredient = useRef<number>(0)
-    const [ingredients, setIngredients] = useState<Ingredient[]>([])
+    const [ingredients, setIngredients] = useState<UnsavedIngredient[]>([])
     function addIngredient() {
-        setIngredients([...ingredients, {id: ingredient.current, value: ""  }])
-        ingredient.current++
+        setIngredients([...ingredients, {id: uuidv4(), value: ""  }])
     }
-    function removeIngredient(id: number) {
+    function removeIngredient(id: string) {
         setIngredients(ingredients.filter(ingredient => ingredient.id !== id))
     }
-    function updateIngredient(id:number, value: string) {
+    function updateIngredient(id:string, value: string) {
         setIngredients(ingredients.map(ingredient => {
             if (ingredient.id === id) {
                 return {
@@ -41,7 +44,6 @@ const AddRecipe = () => {
     const [method, setMethod] = useState<MethodStep[]>([])
     function addStep() {
         setMethod([...method, {id: methodIdRef.current, value: ""  }])
-        ingredient.current++
     }
     function removeStep(id: number) {
         setMethod(method.filter(step => step.id !== id))
@@ -58,20 +60,11 @@ const AddRecipe = () => {
             return step
         }))
     }
-    function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
-        e.preventDefault()
-        const recipe = { id: uuidv4(), title, ingredients, method }
-        let storageRecipes = localStorage.getItem('recipes')
-        let recipes = storageRecipes ? JSON.parse(storageRecipes) as Recipe[] : [] 
-        recipes.push(recipe)
-        localStorage.setItem('recipes', JSON.stringify(recipes))
-        route.push('/')
-    }
 
     return (
         <main>
             <h1>Add New Recipe</h1>
-            <form onSubmit={handleSubmit}>
+            <form action={formAction}>
                 <label htmlFor='title'>Title</label>
                 <input 
                     autoFocus
@@ -84,10 +77,10 @@ const AddRecipe = () => {
                     placeholder="New Recipe" />
                 <Ingredients ingredients={ingredients} addIngredient={addIngredient} updateIngredient={updateIngredient} removeIngredient={removeIngredient} /> 
                 <Method method={method} addStep={addStep} updateStep={updateStep} removeStep={removeStep} /> 
-                <button>Save</button>
-
-
-
+                <button disabled={pending}>Save</button>
+                <p aria-live="polite" data-testid='message'>
+                    {state?.message}
+                </p>
             </form>
         </main>
     )

@@ -1,16 +1,11 @@
-import { useRef, useState } from 'react';
+import { UnsavedIngredient } from './page';
 import styles from './page.module.css'
 
-export type Ingredient = {
-    id: number;
-    value: string;
-}
-
 type Props = {
-    ingredients: Ingredient[];
+    ingredients: UnsavedIngredient[];
     addIngredient: () => void;
-    removeIngredient: (id: number) => void;
-    updateIngredient: (id: number, value: string) => void;
+    removeIngredient: (id: string) => void;
+    updateIngredient: (id: string, value: string) => void;
 }
 
 const Ingredients = ({ ingredients, addIngredient, removeIngredient, updateIngredient}: Props) => {
@@ -29,7 +24,7 @@ const Ingredients = ({ ingredients, addIngredient, removeIngredient, updateIngre
 
 export default Ingredients;
 
-const Ingredient = ({ ingredient,removeIngredient, updateIngredient }: { ingredient: Ingredient, removeIngredient: (id: number) => void, updateIngredient: (id: number, value: string) => void}) => {
+const Ingredient = ({ ingredient,removeIngredient, updateIngredient }: { ingredient: UnsavedIngredient, removeIngredient: (id: string) => void, updateIngredient: (id: string, value: string) => void}) => {
     // const [isDisabled, setIsDisabled] = useState(true)
     return(
         <li>

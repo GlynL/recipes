@@ -1,12 +1,25 @@
-import { Recipe } from "../add_recipe/page"
+import { sql } from "@vercel/postgres";
+import { IngredientSchemaArray, RecipeSchema, RecipeSchemaArray } from "../models";
 
-export function getRecipes() {
-    const storedRecipes = localStorage.getItem('recipes') ?? '[]'
-    const recipes = JSON.parse(storedRecipes) as Recipe[]
+export async function getRecipes() {
+    // unstable_noStore() -- using revalidatePath() when changing recipes for now
+    // unstable_noStore()
+    const { rows } = await sql`SELECT * from RECIPES;`;
+    const recipes = RecipeSchemaArray.parse(rows)
     return recipes
 }
 
-export function getRecipe(id: string) {
-    const recipes = getRecipes();
-    return recipes.find(recipe => recipe.id === id);
+export async function getRecipe(id: string) {
+    const { rows } = await sql`SELECT * FROM recipes WHERE id = ${id};`
+    const recipe = RecipeSchema.parse(rows[0])
+    return recipe;
+}
+
+export async function getIngredients(recipeId: string) {
+    const { rows } = await sql`SELECT * FROM ingredients WHERE recipe_id = ${recipeId};`
+    console.log('rooowssssss')
+    console.log(rows)
+    const ingredients = IngredientSchemaArray.parse(rows)
+    return ingredients;
+
 }

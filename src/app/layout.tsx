@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" title='Recipes'>
       <body className={inter.className}>
         {/* <ChakraProvider>         */}
           <Banner />

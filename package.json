@@ -6,19 +6,25 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "npx ts-node -O '{\"module\": \"commonjs\"}' -r dotenv/config ./scripts/seed.ts",
+    "test": "npx playwright test"
   },
   "dependencies": {
     "@types/uuid": "^9.0.6",
-    "next": "13.5.4",
+    "@vercel/postgres": "^0.5.1",
+    "next": "^14.0.1",
     "react": "^18",
     "react-dom": "^18",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.39.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "dotenv": "^16.3.1",
     "eslint": "^8",
     "eslint-config-next": "13.5.4",
     "typescript": "^5"

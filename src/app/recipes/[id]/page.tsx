@@ -1,5 +1,4 @@
-'use client'
-import { getRecipe } from '@/app/data';
+import { getIngredients, getRecipe } from '@/app/data';
 import React from 'react';
 
 type Props = {
@@ -9,12 +8,21 @@ type Props = {
 }
 
 
-const Recipe = ( { params } : Props) => {
-    const recipe = getRecipe(params.id);
+const Recipe = async ( { params } : Props) => {
+    const recipe = await getRecipe(params.id);
+    const ingredients = await getIngredients(params.id)
     if (!recipe) return null;
     return (
         <div>
             <h2>{recipe.title}</h2>
+            <div>
+                <h3>Ingredients</h3>
+                <ul>
+                    {ingredients.map(ingredient => (
+                        <li key={ingredient.id}>{ingredient.value}</li>
+                    ))}
+                </ul>
+            </div>
         </div>
     )
 }

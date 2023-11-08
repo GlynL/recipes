@@ -5,11 +5,11 @@ export default function Banner() {
   return (
     <header>
         <div className={styles.banner}>
-            <Link href='/'>
+            <Link href='/' data-testid='nav-home-link'>
                 <h1>Recipes</h1>
             </Link>
             <nav>
-                <Link href='/add_recipe'>New</Link> 
+                <Link href='/add_recipe' data-testid='nav-new-link'>New</Link> 
             </nav>
         </div>
     </header>
