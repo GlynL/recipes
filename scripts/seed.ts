@@ -169,7 +169,6 @@ async function main() {
   await seedRecipes(client);
   await seedIngredients(client);
   await seedSteps(client);
-  await client.end();
 }
 
 main().catch((err) => {

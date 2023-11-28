@@ -52,9 +52,7 @@ export async function createRecipe(
               VALUES (${step.id}, ${step.recipe_id}, ${step.value});
           `;
     }
-    await client.end();
   } catch (err) {
-    await client.end();
     return { message: "Database Error" };
   }
   revalidatePath("/");
@@ -109,9 +107,7 @@ export async function updateRecipe(
               VALUES (${step.id}, ${step.recipe_id}, ${step.value});
           `;
     }
-    await client.end();
   } catch (err) {
-    await client.end();
     console.error(err);
     return { message: "Database Error" };
   }
